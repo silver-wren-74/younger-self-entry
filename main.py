@@ -19,6 +19,12 @@ LINE = (
 
 
 def main() -> None:
+    # Guard the gate locally: the scorer refuses anything outside 1..200
+    # characters or all-whitespace, so fail loudly here instead of silently
+    # submitting an invalid entry.
+    assert 1 <= len(LINE) <= 200, f"line is {len(LINE)} chars, gate is 1..200"
+    assert LINE.strip(), "line must not be only whitespace"
+    assert "\n" not in LINE, "the entry is a single line"
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as f:
         f.write(LINE)
